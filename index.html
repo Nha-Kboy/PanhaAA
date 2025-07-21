@@ -3,95 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click to Watch</title>
+    <title>គេហទំព័រផ្ទាល់ខ្លួនរបស់ខ្ញុំ</title>
     <style>
-        /* --- ការកំណត់ទូទៅ --- */
-        body, html {
+        body {
+            font-family: 'Khmer OS Siemreap', sans-serif; /* ប្រើពុម្ពអក្សរខ្មែរ (ត្រូវដំឡើងពុម្ពអក្សរនេះក្នុងប្រព័ន្ធរបស់អ្នក ឬប្រើ Google Fonts) */
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Koulen', sans-serif;
-            background-color: #ffffff; /* ផ្ទៃខាងក្រោយពណ៌ស */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            overflow: hidden; /* លាក់ scrollbar បើមិនចាំបាច់ */
         }
 
-        /* --- Style សម្រាប់ទំព័រទី១ (Landing Page) --- */
-        #landing-page {
-            width: 100%;
-            height: 100%;
-            display: grid; 
-            place-items: center;
-        }
-
-        #enter-button {
-            max-width: 500px;
-            width: 80vw;
-            height: auto;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        #enter-button:hover {
-            transform: scale(1.05);
-        }
-
-        /* --- Style សម្រាប់ទំព័រទី២ (Video Page) --- */
-        #video-page {
-            display: none; 
-            width: 100%;
-            height: 100%;
+        #welcome-page, #video-page {
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 100%;
+            height: 100vh;
+            position: absolute; /* ដើម្បីឱ្យទំព័រនីមួយៗនៅដាច់ដោយឡែក */
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease-in-out; /* ធ្វើឱ្យការប្តូរទំព័រមើលទៅរលូន */
         }
 
-        .video-page-title {
-            width: 95%; /* បានកែទំហំ - ធ្វើឲ្យរូបចំណងជើងធំជាងមុន */
-            max-width: 800px; 
-            height: auto;
-            margin-bottom: 20px; 
-        }
-        
-        #main-video {
-            width: 90%; /* បានកែទំហំ - ធ្វើឲ្យវីដេអូតូចជាងមុន */
-            max-width: 450px; 
-            height: auto;
-            border: 2px solid black; 
+        #welcome-page {
+            background-color: #e0f7fa; /* ពណ៌ផ្ទៃខាងក្រោយទំព័រស្វាគមន៍ */
+            z-index: 2; /* ឱ្យនៅពីលើទំព័រវីដេអូ */
         }
 
+        #video-page {
+            background-color: #cfd8dc; /* ពណ៌ផ្ទៃខាងក្រោយទំព័រវីដេអូ */
+            opacity: 0; /* លាក់ដំបូង */
+            pointer-events: none; /* មិនឱ្យចុចបានពេលលាក់ */
+            z-index: 1; /* ឱ្យនៅពីក្រោមទំព័រស្វាគមន៍ */
+        }
+
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .visible {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        .click-button {
+            padding: 15px 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .click-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .video-container {
+            width: 80%; /* កំណត់ទទឹងវីដេអូ */
+            max-width: 960px; /* ទទឹងអតិបរមា */
+            aspect-ratio: 16 / 9; /* រក្សាសមាមាត្រ 16:9 */
+            background-color: #000; /* ផ្ទៃខាងក្រោយខ្មៅសម្រាប់វីដេអូ */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ធ្វើឱ្យវីដេអូពេញផ្ទៃ */
+        }
+
+        .video-title {
+            font-size: 3em; /* ទំហំអក្សរធំ */
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .video-title {
+                font-size: 2em;
+            }
+            .video-container {
+                width: 95%;
+            }
+            .click-button {
+                font-size: 20px;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-title {
+                font-size: 1.5em;
+            }
+            .click-button {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div id="landing-page">
-        <img id="enter-button" src="c:\Users\ADMIN\Pictures\Screenshots\ថ.png" alt="ចុចដើម្បីមើល">
+    <div id="welcome-page" class="visible">
+        <button class="click-button" onclick="goToVideoPage()">ចុចទីនេះ</button>
     </div>
 
-    <div id="video-page">
-        <img src="c:\Users\ADMIN\Pictures\Screenshots\Screenshot 2025-07-11 203046.png" alt="ទម្លាក់ទូរស័ព្ទចុះហើយមើលមេរៀន !!" class="video-page-title">
-        <img src="c:\Users\ADMIN\Pictures\Screenshots\Screenshot 2025-07-11 204214.png"> 
-
-        <video id="main-video" loop playsinline controls>
-            <source src="c:\Users\ADMIN\Desktop\video_2025-07-11_20-16-48.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <div id="video-page" class="hidden">
+        <h1 class="video-title">បាក់ឌុបហើយបងបង កុំភ័យ</h1>
+        <div class="video-container">
+            <video id="myVideo" controls autoplay playsinline>
+                <source src="video_2025-07-11_20-16-48.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
 
     <script>
-        const landingPage = document.getElementById('landing-page');
-        const videoPage = document.getElementById('video-page');
-        const enterButton = document.getElementById('enter-button');
-        const video = document.getElementById('main-video');
+        function goToVideoPage() {
+            const welcomePage = document.getElementById('welcome-page');
+            const videoPage = document.getElementById('video-page');
+            const myVideo = document.getElementById('myVideo');
 
-        enterButton.addEventListener('click', function() {
-            landingPage.style.display = 'none';
-            videoPage.style.display = 'flex';
-            video.play();
-        });
+            // លាក់ទំព័រស្វាគមន៍
+            welcomePage.classList.remove('visible');
+            welcomePage.classList.add('hidden');
+
+            // បង្ហាញទំព័រវីដេអូ បន្ទាប់ពី transition រួចរាល់
+            // setTimeout គឺដើម្បីឱ្យ transition មានពេលដំណើរការ
+            setTimeout(() => {
+                videoPage.classList.remove('hidden');
+                videoPage.classList.add('visible');
+
+                // លេងវីដេអូដោយស្វ័យប្រវត្តិ
+                // ដោយសារអ្នកប្រើប្រាស់បានចុចប៊ូតុងរួចហើយ Browser នឹងអនុញ្ញាតឱ្យលេងជាមួយសំឡេង
+                myVideo.play().catch(error => {
+                    console.error("Video play failed:", error);
+                });
+            }, 500); // រង់ចាំ 0.5 វិនាទី (ស្មើនឹង transition time នៅក្នុង CSS)
+        }
+
+        // បានលុបចោល window.onload function ដែលកំណត់ myVideo.muted = true;
+        // ព្រោះយើងចង់ឱ្យវីដេអូមានសំឡេងនៅពេលលេងបន្ទាប់ពីចុចប៊ូតុង
     </script>
-
 </body>
 </html>
