@@ -1,167 +1,212 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>គេហទំព័រផ្ទាល់ខ្លួនរបស់ខ្ញុំ</title>
+  <meta charset="UTF-8">
+  <title>Click the Button Game</title>
+  <style>
+     button {
+       font-family: 'Khmer OS battambang', system-ui, Arial, sans-serif;
+      font-size: 20px;
+      color: #fff;
+      background: #28a745;
+      border: none;
+      padding: px 24px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    body {
+      font-family: 'Khmer OS battambang', system-ui, Arial, sans-serif;
+      text-align: center;
+      background: pink;
+    }
+    #gameArea {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      margin: 20px auto;
+      border: 2px solid #333;
+      background: wheat;
+    }
+    #target {
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      background: green;
+      color: black;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    #score, #timer, #levelDisplay {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    #popupContent {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px green;
+    }
+    #popupContent h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    .popupBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 5px;
+      background: #007bff;
+      color: Black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+   <!-- Preconnect for faster font loading -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Google Fonts: Noto Sans Khmer + Kantumruy Pro -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        body {
-            font-family: 'Khmer OS Siemreap', sans-serif; /* ប្រើពុម្ពអក្សរខ្មែរ (ត្រូវដំឡើងពុម្ពអក្សរនេះក្នុងប្រព័ន្ធរបស់អ្នក ឬប្រើ Google Fonts) */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f2f5;
-            overflow: hidden; /* លាក់ scrollbar បើមិនចាំបាច់ */
-        }
+      /* Global default for Khmer content */
+      html, body {
+        font-family: 'Khmer OS Siemreap', system-ui, Arial, sans-serif;
+        line-height: 1.6;
+      }
 
-        #welcome-page, #video-page {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100vh;
-            position: absolute; /* ដើម្បីឱ្យទំព័រនីមួយៗនៅដាច់ដោយឡែក */
-            top: 0;
-            left: 0;
-            transition: opacity 0.5s ease-in-out; /* ធ្វើឱ្យការប្តូរទំព័រមើលទៅរលូន */
-        }
-
-        #welcome-page {
-            background-color: #e0f7fa; /* ពណ៌ផ្ទៃខាងក្រោយទំព័រស្វាគមន៍ */
-            z-index: 2; /* ឱ្យនៅពីលើទំព័រវីដេអូ */
-        }
-
-        #video-page {
-            background-color: #cfd8dc; /* ពណ៌ផ្ទៃខាងក្រោយទំព័រវីដេអូ */
-            opacity: 0; /* លាក់ដំបូង */
-            pointer-events: none; /* មិនឱ្យចុចបានពេលលាក់ */
-            z-index: 1; /* ឱ្យនៅពីក្រោមទំព័រស្វាគមន៍ */
-        }
-
-        .hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
-        .visible {
-            opacity: 1 !important;
-            pointer-events: auto !important;
-        }
-
-        .click-button {
-            padding: 15px 30px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .click-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .video-container {
-            width: 80%; /* កំណត់ទទឹងវីដេអូ */
-            max-width: 960px; /* ទទឹងអតិបរមា */
-            aspect-ratio: 16 / 9; /* រក្សាសមាមាត្រ 16:9 */
-            background-color: #000; /* ផ្ទៃខាងក្រោយខ្មៅសម្រាប់វីដេអូ */
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* ធ្វើឱ្យវីដេអូពេញផ្ទៃ */
-        }
-
-        .video-title {
-            font-size: 3em; /* ទំហំអក្សរធំ */
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .video-title {
-                font-size: 2em;
-            }
-            .video-container {
-                width: 95%;
-            }
-            .click-button {
-                font-size: 20px;
-                padding: 12px 25px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .video-title {
-                font-size: 1.5em;
-            }
-            .click-button {
-                font-size: 18px;
-                padding: 10px 20px;
-            }
-        }
+      /* Alternate heading style */
+      h1, h2, h3 {
+        font-family: 'Khmer OS Siemreap', system-ui, sans-serif;
+        font-weight: 600;
+      }
     </style>
 </head>
 <body>
+  <h1>សូមអ្នកចុច​ "ចុចមកៗ"</h1>
+  <p>ចុចមួយដងបានពិន្ទុ១ មានរយៈពេល ២០វិនាទីក្នុងមួយវគ្គ។</p>
+  
+  <div id="gameArea">
+    <button id="target">ចុចមកៗ</button>
+  </div>
+  
+  <div id="score">Score: 0</div>
+  <div id="timer">Time left: 20s</div>
+  <div id="levelDisplay">Level: 1</div>
 
-    <div id="welcome-page" class="visible">
-        <button class="click-button" onclick="goToVideoPage()">ចុចទីនេះ</button>
+  <!-- Popup -->
+  <div id="popup">
+    <div id="popupContent">
+      <h2 id="popupMessage"></h2>
+      <button id="nextLevelBtn" class="popupBtn">Next Level</button>
+      <button id="tryAgainBtn" class="popupBtn">Try Again</button>
     </div>
+  </div>
 
-    <div id="video-page" class="hidden">
-        <h1 class="video-title">ជិតបាក់ឌុបហើយបងបង</h1>
-        <div class="video-container">
-            <video id="myVideo" controls autoplay playsinline>
-                <source src="video_2025-07-11_20-16-48.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-    </div>
+  <script>
+    const target = document.getElementById("target");
+    const gameArea = document.getElementById("gameArea");
+    const scoreDisplay = document.getElementById("score");
+    const timerDisplay = document.getElementById("timer");
+    const levelDisplay = document.getElementById("levelDisplay");
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
+    const tryAgainBtn = document.getElementById("tryAgainBtn");
 
-    <script>
-        function goToVideoPage() {
-            const welcomePage = document.getElementById('welcome-page');
-            const videoPage = document.getElementById('video-page');
-            const myVideo = document.getElementById('myVideo');
+    let score = 0;
+    let timeLeft = 20;
+    let gameInterval;
+    let gameOver = false;
+    let level = 1;
+    const maxLevel = 3;
 
-            // លាក់ទំព័រស្វាគមន៍
-            welcomePage.classList.remove('visible');
-            welcomePage.classList.add('hidden');
+    function moveTarget() {
+      const maxX = gameArea.clientWidth - target.clientWidth;
+      const maxY = gameArea.clientHeight - target.clientHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      target.style.left = randomX + "px";
+      target.style.top = randomY + "px";
+    }
 
-            // បង្ហាញទំព័រវីដេអូ បន្ទាប់ពី transition រួចរាល់
-            // setTimeout គឺដើម្បីឱ្យ transition មានពេលដំណើរការ
-            setTimeout(() => {
-                videoPage.classList.remove('hidden');
-                videoPage.classList.add('visible');
+    target.addEventListener("click", () => {
+      if (gameOver) return;
+      score++;
+      scoreDisplay.textContent = "Score: " + score;
+      moveTarget();
 
-                // លេងវីដេអូដោយស្វ័យប្រវត្តិ
-                // ដោយសារអ្នកប្រើប្រាស់បានចុចប៊ូតុងរួចហើយ Browser នឹងអនុញ្ញាតឱ្យលេងជាមួយសំឡេង
-                myVideo.play().catch(error => {
-                    console.error("Video play failed:", error);
-                });
-            }, 500); // រង់ចាំ 0.5 វិនាទី (ស្មើនឹង transition time នៅក្នុង CSS)
+      if (score >= 15) {
+        clearInterval(gameInterval);
+        target.disabled = true;
+        popup.style.display = "flex";
+        if (level >= maxLevel) {
+          popupMessage.textContent = "🎉 Congratulation 🎉";
+          nextLevelBtn.style.display = "none";
+          tryAgainBtn.style.display = "inline-block";
+        } else {
+          popupMessage.textContent = "🎉 You Win 🎉";
+          nextLevelBtn.style.display = "inline-block";
+          tryAgainBtn.style.display = "none";
         }
+        gameOver = true;
+      }
+    });
 
-        // បានលុបចោល window.onload function ដែលកំណត់ myVideo.muted = true;
-        // ព្រោះយើងចង់ឱ្យវីដេអូមានសំឡេងនៅពេលលេងបន្ទាប់ពីចុចប៊ូតុង
-    </script>
+    function startGame() {
+      score = 0;
+      timeLeft = 20 - (level - 1) * 5; // harder each level
+      if (timeLeft < 5) timeLeft = 5;
+      gameOver = false;
+      target.disabled = false;
+      scoreDisplay.textContent = "Score: 0";
+      timerDisplay.textContent = "Time left: " + timeLeft + "s";
+      levelDisplay.textContent = "Level: " + level;
+      popup.style.display = "none";
+      moveTarget();
+
+      gameInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = "Time left: " + timeLeft + "s";
+        if (timeLeft <= 0 && !gameOver) {
+          clearInterval(gameInterval);
+          target.disabled = true;
+          popup.style.display = "flex";
+          popupMessage.textContent = "😢 Game Over!";
+          nextLevelBtn.style.display = "none";
+          tryAgainBtn.style.display = "inline-block";
+          gameOver = true;
+        }
+      }, 1000);
+    }
+
+    nextLevelBtn.addEventListener("click", () => {
+      level++;
+      startGame();
+    });
+
+    tryAgainBtn.addEventListener("click", () => {
+      level = 1;
+      startGame();
+    });
+
+    startGame();
+  </script>
 </body>
 </html>
