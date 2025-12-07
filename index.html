@@ -4,33 +4,33 @@
   <meta charset="UTF-8">
   <title>Click the Button Game</title>
   <style>
-     button {
-       font-family: 'Khmer OS battambang', system-ui, Arial, sans-serif;
-      font-size: 20px;
-      color: #fff;
-      background: #28a745;
-      border: none;
-      padding: px 24px;
-      border-radius: 9px;
-      cursor: pointer;
+    body {
+      font-family: 'Khmer OS Siemreap', system-ui, Arial, sans-serif;
+      text-align: center;
+      background: white;
+      margin: 0;
+      padding: 0;
     }
 
-    body {
-      font-family: 'Khmer OS battambang', system-ui, Arial, sans-serif;
-      text-align: center;
-      background: pink;
+    h1, h2, h3 {
+      font-family: 'Khmer OS Siemreap', system-ui, sans-serif;
+      font-weight: 600;
     }
+
     #gameArea {
       position: relative;
-      width: 600px;
-      height: 400px;
+      width: 90%;          /* Responsive width */
+      max-width: 600px;    /* Limit for desktop */
+      height: 300px;       /* Default height */
       margin: 20px auto;
       border: 2px solid #333;
-      background: wheat;
+      background: white;
     }
+
     #target {
       position: absolute;
-      width: 80px;
+      width: 20%;          /* Responsive size */
+      min-width: 60px;
       height: 40px;
       background: green;
       color: black;
@@ -39,10 +39,23 @@
       font-size: 16px;
       border-radius: 5px;
     }
+
+    button {
+      font-family: 'Khmer OS Siemreap', system-ui, Arial, sans-serif;
+      font-size: 18px;
+      color: #fff;
+      background: #28a745;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
     #score, #timer, #levelDisplay {
       font-size: 20px;
       margin-top: 10px;
     }
+
     #popup {
       display: none;
       position: fixed;
@@ -52,6 +65,7 @@
       justify-content: center;
       align-items: center;
     }
+
     #popupContent {
       background: #fff;
       padding: 30px;
@@ -59,53 +73,52 @@
       text-align: center;
       box-shadow: 0 0 10px green;
     }
+
     #popupContent h2 {
       font-size: 32px;
       margin-bottom: 20px;
     }
+
     .popupBtn {
       padding: 10px 20px;
       font-size: 18px;
       margin: 5px;
       background: #007bff;
-      color: Black;
+      color: black;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
+
+    /* 📱 Media Queries for small screens */
+    @media (max-width: 480px) {
+      #gameArea {
+        height: 220px;
+      }
+      #target {
+        width: 25%;
+        min-width: 50px;
+        height: 35px;
+        font-size: 14px;
+      }
+      #score, #timer, #levelDisplay {
+        font-size: 16px;
+      }
+      button {
+        font-size: 16px;
+        padding: 10px 18px;
+      }
+    }
   </style>
-   <!-- Preconnect for faster font loading -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <!-- Google Fonts: Noto Sans Khmer + Kantumruy Pro -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <style>
-      /* Global default for Khmer content */
-      html, body {
-        font-family: 'Khmer OS Siemreap', system-ui, Arial, sans-serif;
-        line-height: 1.6;
-      }
-
-      /* Alternate heading style */
-      h1, h2, h3 {
-        font-family: 'Khmer OS Siemreap', system-ui, sans-serif;
-        font-weight: 600;
-      }
-    </style>
 </head>
 <body>
   <h1>សូមអ្នកចុច​ "ចុចមកៗ"</h1>
-  <p>ចុចមួយដងបានពិន្ទុ១ មានរយៈពេល ២០វិនាទីក្នុងមួយវគ្គ។</p>
-  
+  <p>ចុចមួយដងបានពិន្ទុ១ មានរយៈពេល ២០ វិនាទីក្នុងមួយវគ្គ។</p>
+
   <div id="gameArea">
     <button id="target">ចុចមកៗ</button>
   </div>
-  
+
   <div id="score">Score: 0</div>
   <div id="timer">Time left: 20s</div>
   <div id="levelDisplay">Level: 1</div>
