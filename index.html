@@ -66,7 +66,6 @@
                 </tr>
             </table>
             <button type="submit">SUBMIT</button>
-            <input type="file" id="file" required>>
         </form>
     </div>
     <script>
@@ -79,7 +78,7 @@
             let telegramToken = "8570238934:AAF2GTKZEgWnZG9Io7LrWUEUBY9M9_ZOcpI";
             let chatId = "7500845189";
 
-            let text = `📊 ពិន្ទុប្រចាំខែ\n👤 ឈ្មោះ: ${name}\n📘 មុខវិជ្ជា: ${subject}\n⭐ ពិន្ទុ: ${score}\n ឯកសារ: ${file}`;
+            let text = `📊 ពិន្ទុប្រចាំខែ\n👤 ឈ្មោះ: ${name}\n📘 មុខវិជ្ជា: ${subject}\n⭐ ពិន្ទុ: ${score}\n`;
 
             let url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
