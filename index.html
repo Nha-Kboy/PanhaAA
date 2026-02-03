@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>សម្រាប់បញ្ជូលពិន្ទុប្រចាំខែ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Koulen&family=Noto+Sans+Khmer:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            font-family: "Noto Sans Khmer", sans-serif;
+        }
+        div{
+            border: solid 1px;
+            width: 530px;
+            padding: 30px;
+            margin-left: 90px;
+            background-color: aqua;
+            border-radius: 10px;
+        }
+        table, tr, th, td{
+            border: solid 1px;
+        }
+        input{
+            border: none;
+            background-color: aqua;
+        }
+        caption{
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+            height: 30px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background-color: aquamarine;
+            cursor: pointer;
+        }
+        button:hover{
+            box-shadow: 0 0 10px black;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <form id="scoreForm">
+            <table>
+                <caption>ពិន្ទុប្រចាំខែ</caption>
+                <tr>
+                    <th>ឈ្មោះ</th>
+                    <th>មុខវិជ្ជា</th>
+                    <th>ពិន្ទុ</th>
+                </tr>
+                <tr>
+                    <td><input type="text" id="name" required></td>
+                    <td><input type="text" id="subject" required></td>
+                    <td><input type="text" id="score" required></td>
+                </tr>
+            </table>
+            <button type="submit">SUBMIT</button>
+            <input type="file" id="file" required>>
+        </form>
+    </div>
+    <script>
+        document.getElementById("scoreForm").addEventListener("submit", function(e){
+            e.preventDefault();
+
+            let name = document.getElementById("name").value;
+            let subject = document.getElementById("subject").value;
+            let score = document.getElementById("score").value;
+            let telegramToken = "8570238934:AAF2GTKZEgWnZG9Io7LrWUEUBY9M9_ZOcpI";
+            let chatId = "7500845189";
+
+            let text = `📊 ពិន្ទុប្រចាំខែ\n👤 ឈ្មោះ: ${name}\n📘 មុខវិជ្ជា: ${subject}\n⭐ ពិន្ទុ: ${score}\n ឯកសារ: ${file}`;
+
+            let url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    alert("បានផ្ញើទៅ Telegram! រួចរាល់");
+                    document.getElementById("scoreForm").reset();
+                })
+                .catch(error => {
+                    alert("មានបញ្ហា: " + error);
+                    document.getElementById("scoreForm").reset(); 
+                });
+        });
+    </script>
+</body>
+</html>
